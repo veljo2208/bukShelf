@@ -89,6 +89,23 @@ namespace bukShelf.Database
                 }
             }
         }
+
+        public bool ReRemoveBookFromDatabase(string bookName)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "DELETE FROM Book WHERE Title = @Title";
+                    cmd.Parameters.AddWithValue("Title", bookName);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+        }
     }
 }
 
