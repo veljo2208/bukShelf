@@ -1,71 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MyProject.Models
 {
+    public enum MaterialType
+    {
+        Wood,
+        Metal
+    }
+
     public class Shelf
     {
         // Props
-        public string ShelfId { get; private set; }
+        public int Id { get; set; }
+        public string ShelfType { get; set; }
+        public double Surface { get; set; }
+        public int BookCount { get; private set; }
+        public string Status { get; set; }
         public List<Book> Books { get; private set; }
-        public double MaxShelfLoad { get; private set; }
-        public double CurrentShelfLoad { get; private set; }
+        public double MaxWeightCapacity { get; private set; }
+        public int MaxBooks { get; private set; }
+        public double CurrentWeightLoad { get; private set; }
         public bool IsShelfSafe { get; private set; }
+        public MaterialType Material { get; private set; }
 
-        // Constructor of shelf class
-        public Shelf(string shelfId, double maxLoad)
+        // Constructor
+        public Shelf(string shelfType, double surface, MaterialType material)
         {
-            ShelfId = shelfId;
-            MaxShelfLoad = maxLoad;
+            ShelfType = shelfType;
+            Surface = surface;
+            Material = material;
             Books = new List<Book>();
-            CurrentShelfLoad = 0;
-            IsShelfSafe = true;
-        }
 
 
-        public void AddBook(Book book)
-        {
-
-            if (CurrentShelfLoad + book.Weight > MaxShelfLoad)
+            if (material == MaterialType.Wood)
             {
-                Console.WriteLine("Cannot add the book. Exceeds maximum load.");
-                return;
+                MaxBooks = 6;
+                MaxWeightCapacity = 10.14 * Surface;
+            }
+            else if (material == MaterialType.Metal)
+            {
+                MaxBooks = int.MaxValue;
+                MaxWeightCapacity = 26.45 * Surface;
             }
 
-            Books.Add(book);
-            CurrentShelfLoad += book.Weight;
-            UpdateShelfStatus();
-        }
-
-        public void RemoveBook(Book book)
-        {
-            if (Books.Contains(book))
-            {
-                Books.Remove(book);
-                CurrentShelfLoad -= book.Weight;
-                UpdateShelfStatus();
-            }
-            else
-            {
-                Console.WriteLine("Book not found on this shelf.");
-            }
+            BookCount = 0;
+            Status = "Safe";
         }
 
         private void UpdateShelfStatus()
         {
-            double loadPercentage = (CurrentShelfLoad / MaxShelfLoad) * 100;
+            double loadPercentage = (CurrentWeightLoad / MaxWeightCapacity) * 100;
 
-            if (loadPercentage > 100)
+            if (Material == MaterialType.Metal && loadPercentage > 125)
             {
                 IsShelfSafe = false;
-                Console.WriteLine($"Shelf {ShelfId} is unsafe! Exceeds maximum load.");
+                Console.WriteLine($"Shelf {Id} is unsafe! Exceeds maximum load.");
             }
             else
             {
                 IsShelfSafe = true;
-                Console.WriteLine($"Shelf {ShelfId} is safe. Load percentage: {loadPercentage}%");
+                Console.WriteLine($"Shelf {Id} is safe. Load percentage: {loadPercentage}%");
             }
         }
     }
 }
-

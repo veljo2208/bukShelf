@@ -58,7 +58,7 @@ namespace bukShelf.Managers
             Console.WriteLine("Enter the name of the book to delete: ");
             string bookName = Console.ReadLine();
 
-            bool deletedSuccessfully = _databaseService.ReRemoveBookFromDatabase(bookName);
+            bool deletedSuccessfully = _databaseService.RemoveBookFromDatabase(bookName);
 
             if (deletedSuccessfully)
             {
@@ -72,6 +72,19 @@ namespace bukShelf.Managers
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
+
+        public void ListAllBooks()
+        {
+            List<Book> books = _databaseService.GetAllBooks();
+
+            Console.WriteLine("Available Books:");
+            Console.WriteLine("Id\tTitle\tAuthor");
+            foreach (var book in books)
+            {
+                Console.WriteLine($"{book.Id}\t{book.Title}\t{book.Author}");
+            }
+        }
+
 
     }
 }

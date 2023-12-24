@@ -5,6 +5,7 @@ namespace MyProject.Models
     public class Book
     {
         // Props
+        public int Id { get; set; }
         public string Title { get; private set; }
         public string Author { get; private set; }
         public double Weight { get; private set; } // Weight in grams

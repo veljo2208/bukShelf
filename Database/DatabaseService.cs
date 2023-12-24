@@ -18,7 +18,7 @@ namespace bukShelf.Database
         {
             string bookScript = File.ReadAllText(@"D:\Projects\school-project\bukShelf\SqlScripts\CreateTableBook.sql");
             string shelfScript = File.ReadAllText(@"D:\Projects\school-project\bukShelf\SqlScripts\CreateTableShelf.sql");
-
+            string shelfBookScript = File.ReadAllText(@"D:\Projects\school-project\bukShelf\SqlScripts\CreateTableShelfBook.sql");
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -35,6 +35,9 @@ namespace bukShelf.Database
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText = shelfScript;
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = shelfBookScript;
                         cmd.ExecuteNonQuery();
                     }
                     conn.Close();
@@ -59,7 +62,7 @@ namespace bukShelf.Database
                     {
                         cmd.Connection = conn;
 
-                        cmd.CommandText = "DROP TABLE IF EXISTS book, shelf";
+                        cmd.CommandText = "DROP TABLE IF EXISTS book, shelf, shelfbook";
                         cmd.ExecuteNonQuery();
                     }
                     conn.Close();
@@ -90,7 +93,7 @@ namespace bukShelf.Database
             }
         }
 
-        public bool ReRemoveBookFromDatabase(string bookName)
+        public bool RemoveBookFromDatabase(string bookName)
         {
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -100,6 +103,78 @@ namespace bukShelf.Database
                     cmd.Connection = conn;
                     cmd.CommandText = "DELETE FROM Book WHERE Title = @Title";
                     cmd.Parameters.AddWithValue("Title", bookName);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+        public List<Book> GetAllBooks()
+        {
+            List<Book> books = new List<Book>();
+
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand("SELECT Id, Title, Author, Weight, Size FROM Book", conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Book book = new Book(
+                                reader["Title"].ToString(),
+                                reader["Author"].ToString(),
+                                Convert.ToDouble(reader["Weight"]),
+                                Convert.ToDouble(reader["Size"])
+                            );
+                            book.Id = Convert.ToInt32(reader["Id"]); 
+                            books.Add(book);
+                        }
+                    }
+                }
+            }
+
+            return books;
+        }
+
+
+
+        public bool AddShelfToDatabase(Shelf newShelf)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;  
+                    cmd.CommandText = "INSERT INTO Shelf (Shelf_Type, Surface, Book_Count, Current_Weight_Load, Material, Shelf_Status) VALUES (@ShelfType, @Surface, @BookCount,@CurrentWeight,@Material, @Status)";
+                    cmd.Parameters.AddWithValue("ShelfType", newShelf.ShelfType);
+                    cmd.Parameters.AddWithValue("Surface", newShelf.Surface);
+                    cmd.Parameters.AddWithValue("BookCount", newShelf.BookCount);
+                    cmd.Parameters.AddWithValue("CurrentWeight", newShelf.CurrentWeightLoad);
+                    cmd.Parameters.AddWithValue("Material", newShelf.Material.ToString());
+                    cmd.Parameters.AddWithValue("Status", newShelf.Status);
+
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+        public bool AddBookToShelf(string shelfId, Book newBook)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "INSERT INTO ShelfBook (ShelfId, BookTitle) VALUES (@ShelfId, @BookTitle)";
+                    cmd.Parameters.AddWithValue("ShelfId", shelfId);
+                    cmd.Parameters.AddWithValue("BookTitle", newBook.Title);
 
                     int rowsAffected = cmd.ExecuteNonQuery();
                     return rowsAffected > 0;
