@@ -1,5 +1,6 @@
 using bukShelf.Database;
 using bukShelf.Managers;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace bukShelf
@@ -8,7 +9,12 @@ namespace bukShelf
     {
         static void Main(string[] args)
         {
-            string connectionString = "Host=localhost;Port=5432;Database=bukShelfDatabase;Username=admin;Password=admin";
+            var configuration = new ConfigurationBuilder()
+                                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                .Build();
+
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
+
             var databaseService = new DatabaseService(connectionString);
             var bookManager = new BookManager(databaseService);
             var shelfManager = new ShelfManager(databaseService);
@@ -16,6 +22,7 @@ namespace bukShelf
             try
             {
                 databaseService.CreateTables();
+
 
                 Console.WriteLine("Application is running...");
                 Console.WriteLine("Welcome to the Book and Shelf Management System!");
