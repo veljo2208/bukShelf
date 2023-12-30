@@ -16,9 +16,9 @@ namespace bukShelf.Database
 
         public void CreateTables()
         {
-            string bookScript = File.ReadAllText(@"D:\Projects\school-project\bukShelf\SqlScripts\CreateTableBook.sql");
-            string shelfScript = File.ReadAllText(@"D:\Projects\school-project\bukShelf\SqlScripts\CreateTableShelf.sql");
-            string shelfBookScript = File.ReadAllText(@"D:\Projects\school-project\bukShelf\SqlScripts\CreateTableShelfBook.sql");
+            string bookScript = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "SqlScripts", "CreateTableBook.sql"));
+            string shelfScript = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "SqlScripts", "CreateTableShelf.sql"));
+            string shelfBookScript = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "SqlScripts", "CreateTableShelfBook.sql"));
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
