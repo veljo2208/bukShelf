@@ -3,7 +3,7 @@ using bukShelf.Managers;
 using MyProject.Models;
 using System;
 
-namespace bukShelf 
+namespace bukShelf
 {
     public class ShelfManager
     {
@@ -16,17 +16,14 @@ namespace bukShelf
 
         public void AddShelf()
         {
-            //Refers to Sci-Fi, Classic,...
             Console.WriteLine("Enter shelf type:");
             Console.Write("Shelf Type: ");
             string shelfType = Console.ReadLine();
 
-            //Refers to surface area in cm^2
             Console.Write("Surface Area: ");
             double surfaceArea;
             double.TryParse(Console.ReadLine(), out surfaceArea);
 
-            //Refers to type of material
             Console.WriteLine("Choose Material (Wood/Metal): ");
             MaterialType material;
             Enum.TryParse(Console.ReadLine(), out material);
@@ -48,36 +45,37 @@ namespace bukShelf
         public void AddBookToShelf()
         {
             Console.WriteLine("Enter shelf ID to add a book: ");
-            string shelfId = Console.ReadLine();
-
-            Console.WriteLine("Enter book details:");
-            Console.Write("Title: ");
-            string title = Console.ReadLine();
-
-            Console.Write("Author: ");
-            string author = Console.ReadLine();
-
-            Console.Write("Weight: ");
-            double weight;
-            double.TryParse(Console.ReadLine(), out weight);
-
-            Console.Write("Size: ");
-            double size;
-            double.TryParse(Console.ReadLine(), out size);
-
-            Book newBook = new Book(title, author, weight, size);
-
-            // Add the book to the shelf in the database
-            bool bookAddedToShelf = _databaseService.AddBookToShelf(shelfId, newBook);
-
-            if (bookAddedToShelf)
+            if (int.TryParse(Console.ReadLine(), out int shelfId))
             {
-                Console.WriteLine("Book added to the shelf successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Failed to add book to the shelf. Please check your input or shelf ID.");
+                Console.WriteLine("Enter book details:");
+                Console.Write("Title: ");
+                string title = Console.ReadLine();
+
+                Console.Write("Author: ");
+                string author = Console.ReadLine();
+
+                Console.Write("Weight: ");
+                double weight;
+                double.TryParse(Console.ReadLine(), out weight);
+
+                Console.Write("Size: ");
+                double size;
+                double.TryParse(Console.ReadLine(), out size);
+
+                Book newBook = new Book(title, author, weight, size);
+
+                int generatedBookId = _databaseService.AddBookToDatabaseAndGetId(newBook, shelfId);
+
+                if (generatedBookId > 0)
+                {
+                    Console.WriteLine("Book added to the shelf successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to add book to the shelf. Please check your input or shelf ID.");
+                }
             }
         }
+
     }
 }

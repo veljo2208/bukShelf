@@ -15,6 +15,12 @@ namespace bukShelf.Managers
 
         public void AddBook()
         {
+            Console.WriteLine("Enter the shelf ID for the book: ");
+            if (!int.TryParse(Console.ReadLine(), out int shelfId))
+            {
+                Console.WriteLine("Invalid input for shelf ID. Please enter a valid number.");
+                return;
+            }
             Console.WriteLine("Enter the book details:");
             Console.Write("Title: ");
             string title = Console.ReadLine();
@@ -38,7 +44,9 @@ namespace bukShelf.Managers
 
             Book newBook = new Book(title, author, weight, size);
 
-            bool addedSuccessfully = _databaseService.AddBookToDatabase(newBook);
+            int generatedBookId = _databaseService.AddBookToDatabaseAndGetId(newBook, shelfId);
+
+            bool addedSuccessfully = generatedBookId > 0;
 
             if (addedSuccessfully)
             {

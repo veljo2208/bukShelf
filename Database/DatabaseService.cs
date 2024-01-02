@@ -73,7 +73,7 @@ namespace bukShelf.Database
                 }
             }
         }
-        public bool AddBookToDatabase(Book newBook)
+        public int AddBookToDatabaseAndGetId(Book newBook, int shelfId)
         {
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -81,18 +81,46 @@ namespace bukShelf.Database
                 using (var cmd = new NpgsqlCommand())
                 {
                     cmd.Connection = conn;
-                    cmd.CommandText = "INSERT INTO Book (Title, Author, Weight, Size) VALUES (@Title, @Author, @Weight, @Size)";
+                    cmd.CommandText = "INSERT INTO Book (Title, Author, Weight, Size) VALUES (@Title, @Author, @Weight, @Size) RETURNING Id";
                     cmd.Parameters.AddWithValue("Title", newBook.Title);
                     cmd.Parameters.AddWithValue("Author", newBook.Author);
                     cmd.Parameters.AddWithValue("Weight", newBook.Weight);
                     cmd.Parameters.AddWithValue("Size", newBook.Size);
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && int.TryParse(result.ToString(), out int generatedBookId))
+                    {
+                        if (!ReferenceBookToShelf(generatedBookId, shelfId))
+                        {
+                            return -1;
+                        }
+                        return generatedBookId;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Failed to retrieve generated BookId after insertion.");
+                    }
+                }
+            }
+        }
+        public bool ReferenceBookToShelf(int bookId, int shelfId)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "INSERT INTO ShelfBook (ShelfId, BookId) VALUES (@ShelfId, @BookId)";
+                    cmd.Parameters.AddWithValue("ShelfId", shelfId);
+                    cmd.Parameters.AddWithValue("BookId", bookId);
 
                     int rowsAffected = cmd.ExecuteNonQuery();
                     return rowsAffected > 0;
                 }
             }
         }
-
         public bool RemoveBookFromDatabase(string bookName)
         {
             using (var conn = new NpgsqlConnection(connectionString))
@@ -129,7 +157,7 @@ namespace bukShelf.Database
                                 Convert.ToDouble(reader["Weight"]),
                                 Convert.ToDouble(reader["Size"])
                             );
-                            book.Id = Convert.ToInt32(reader["Id"]); 
+                            book.Id = Convert.ToInt32(reader["Id"]);
                             books.Add(book);
                         }
                     }
@@ -148,7 +176,7 @@ namespace bukShelf.Database
                 conn.Open();
                 using (var cmd = new NpgsqlCommand())
                 {
-                    cmd.Connection = conn;  
+                    cmd.Connection = conn;
                     cmd.CommandText = "INSERT INTO Shelf (Shelf_Type, Surface, Book_Count, Current_Weight_Load, Material, Shelf_Status) VALUES (@ShelfType, @Surface, @BookCount,@CurrentWeight,@Material, @Status)";
                     cmd.Parameters.AddWithValue("ShelfType", newShelf.ShelfType);
                     cmd.Parameters.AddWithValue("Surface", newShelf.Surface);
@@ -164,23 +192,32 @@ namespace bukShelf.Database
             }
         }
 
-        public bool AddBookToShelf(string shelfId, Book newBook)
+        public bool AddBookToShelf(int shelfId, Book newBook)
         {
-            using (var conn = new NpgsqlConnection(connectionString))
+            try
             {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand())
+                using (var conn = new NpgsqlConnection(connectionString))
                 {
-                    cmd.Connection = conn;
-                    cmd.CommandText = "INSERT INTO ShelfBook (ShelfId, BookTitle) VALUES (@ShelfId, @BookTitle)";
-                    cmd.Parameters.AddWithValue("ShelfId", shelfId);
-                    cmd.Parameters.AddWithValue("BookTitle", newBook.Title);
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand())
+                    {
+                        cmd.Connection = conn;
+                        cmd.CommandText = "INSERT INTO ShelfBook (ShelfId, BookId) VALUES (@ShelfId, @BookId)";
+                        cmd.Parameters.AddWithValue("ShelfId", shelfId);
+                        cmd.Parameters.AddWithValue("BookId", newBook.Id);
 
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    return rowsAffected > 0;
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding book to shelf: {ex.Message}");
+                return false;
             }
         }
     }
 }
+
 

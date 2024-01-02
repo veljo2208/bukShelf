@@ -3,4 +3,3 @@ CREATE TABLE ShelfBook (
     BookId INT REFERENCES Book(Id),
     PRIMARY KEY (ShelfId, BookId)
 );
-
