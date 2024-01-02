@@ -4,14 +4,13 @@ namespace MyProject.Models
 {
     public class Book
     {
-        // Props
+ 
         public int Id { get; set; }
-        public string Title { get; private set; }
-        public string Author { get; private set; }
-        public double Weight { get; private set; } // Weight in grams
-        public double Size { get; private set; }   // Size in square centimeters
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public double Weight { get; private set; }
+        public double Size { get; private set; }
 
-        // Constructor for book class
         public Book(string title, string author, double weight, double size)
         {
             Title = title;

@@ -13,7 +13,6 @@ namespace MyProject.Models
 
     public class Shelf
     {
-        // Props
         public int Id { get; set; }
         public string ShelfType { get; set; }
         public double Surface { get; set; }
@@ -26,7 +25,6 @@ namespace MyProject.Models
         public bool IsShelfSafe { get; private set; }
         public MaterialType Material { get; private set; }
 
-        // Constructor
         public Shelf(string shelfType, double surface, MaterialType material)
         {
             ShelfType = shelfType;
