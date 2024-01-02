@@ -76,6 +76,41 @@ namespace bukShelf
                 }
             }
         }
+        public void ListAllShelves()
+        {
+            List<Shelf> shelves = _databaseService.GetAllShelves();
+
+            Console.WriteLine("Available Shelves:");
+            Console.WriteLine("Id\tType\tSurface[cm²]\t\tMaterial\tCount\tWeight[g]\tStatus");
+
+            foreach (var shelf in shelves)
+            {
+                Console.WriteLine($"{shelf.Id}\t{shelf.ShelfType}\t{shelf.Surface,-16}\t{shelf.Material,-8}\t{shelf.BookCount}\t{shelf.CurrentWeightLoad,-10}\t{shelf.Status}");
+            }
+        }
+        public void PrintShelvesWithBooks()
+        {
+            var shelfBooks = _databaseService.GetShelfBooks();
+
+            foreach (var shelfType in shelfBooks.Keys)
+            {
+                
+                    Console.WriteLine($"---> Shelf Genre: {shelfType} <---");
+
+                    foreach (var book in shelfBooks[shelfType])
+                    {
+                        Console.WriteLine($" - Book Title: {book.Title}");
+                        Console.WriteLine($"   Author: {book.Author}");
+                        Console.WriteLine($"   Weight: {book.Weight}g");
+                        Console.WriteLine($"   Size: {book.Size}cm²");
+                        Console.WriteLine();
+                    }
+
+                    Console.WriteLine("----------------------------");
+            }
+        }
+
+
 
     }
 }

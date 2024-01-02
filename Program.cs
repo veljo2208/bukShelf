@@ -30,12 +30,14 @@ namespace bukShelf
                 while (true)
                 {
                     Console.WriteLine("\nSelect an option:");
-                    Console.WriteLine("1. Add a Book");
-                    Console.WriteLine("2. Delete a Book");
+                    Console.WriteLine("1. Add a book");
+                    Console.WriteLine("2. Delete a book");
                     Console.WriteLine("3. Add a Shelf");
-                    Console.WriteLine("4. Add a Book to Shelf");
-                    Console.WriteLine("5. View all Books");
-                    Console.WriteLine("6. Exit");
+                    Console.WriteLine("4. Add a book to shelf");
+                    Console.WriteLine("5. View all books");
+                    Console.WriteLine("6. View all books on shelves");
+                    Console.WriteLine("7. View all shelves");
+                    Console.WriteLine("8. Exit");
 
                     string choice = Console.ReadLine();
 
@@ -57,6 +59,12 @@ namespace bukShelf
                             bookManager.ListAllBooks();
                             break;
                         case "6":
+                            shelfManager.PrintShelvesWithBooks();  
+                            break;
+                        case "7":
+                            shelfManager.ListAllShelves();
+                            break;
+                        case "8":
                             Console.WriteLine("Exiting...");
                             return;
                         default:
