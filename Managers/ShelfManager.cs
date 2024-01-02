@@ -16,17 +16,14 @@ namespace bukShelf
 
         public void AddShelf()
         {
-            //Refers to Sci-Fi, Classic,...
             Console.WriteLine("Enter shelf type:");
             Console.Write("Shelf Type: ");
             string shelfType = Console.ReadLine();
 
-            //Refers to surface area in cm^2
             Console.Write("Surface Area: ");
             double surfaceArea;
             double.TryParse(Console.ReadLine(), out surfaceArea);
 
-            //Refers to type of material
             Console.WriteLine("Choose Material (Wood/Metal): ");
             MaterialType material;
             Enum.TryParse(Console.ReadLine(), out material);
@@ -67,7 +64,6 @@ namespace bukShelf
 
                 Book newBook = new Book(title, author, weight, size);
 
-                // Add the book to the database and obtain its Id
                 int generatedBookId = _databaseService.AddBookToDatabaseAndGetId(newBook, shelfId);
 
                 if (generatedBookId > 0)

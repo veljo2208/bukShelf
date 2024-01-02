@@ -93,7 +93,7 @@ namespace bukShelf.Database
                     {
                         if (!ReferenceBookToShelf(generatedBookId, shelfId))
                         {
-                            return -1; // Indicate failure
+                            return -1;
                         }
                         return generatedBookId;
                     }
@@ -204,7 +204,7 @@ namespace bukShelf.Database
                         cmd.Connection = conn;
                         cmd.CommandText = "INSERT INTO ShelfBook (ShelfId, BookId) VALUES (@ShelfId, @BookId)";
                         cmd.Parameters.AddWithValue("ShelfId", shelfId);
-                        cmd.Parameters.AddWithValue("BookId", newBook.Id); // Assuming BookId is available
+                        cmd.Parameters.AddWithValue("BookId", newBook.Id);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         return rowsAffected > 0;
