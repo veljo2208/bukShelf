@@ -10,14 +10,31 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="ExcelTestScripts\TestBooks.xlsx" />
+    <None Remove="ExcelTestScripts\TestShelves.csv" />
+    <None Remove="ExcelTestScripts\TestShelves.xlsx" />
     <None Remove="SqlScripts\CreateTableBook.sql" />
     <None Remove="SqlScripts\CreateTableShelf.sql" />
     <None Remove="SqlScripts\CreateTableShelfBook.sql" />
+    <None Remove="SqlScripts\InsertTestShelves.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="SqlScripts\InsertTestShelves.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTestScripts\TestBooks.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTestScripts\TestShelves.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTestScripts\TestShelves.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SqlScripts\CreateTableBook.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

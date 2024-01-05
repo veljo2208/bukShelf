@@ -6,8 +6,8 @@ namespace MyProject.Models
     {
  
         public int Id { get; set; }
-        public string Title { get; private set; }
-        public string Author { get; private set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
         public double Weight { get; private set; }
         public double Size { get; private set; }
 
