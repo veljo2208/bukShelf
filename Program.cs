@@ -9,11 +9,26 @@ namespace bukShelf
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Welcome to the Book and Shelf Management System!");
+
+            Console.WriteLine("\nChoose mode:");
+            Console.WriteLine("1. Demo Mode");
+            Console.WriteLine("2. Production Mode");
+
+            string modeChoice = Console.ReadLine();
+
+            bool isDemoMode = modeChoice == "1";
+
             var configuration = new ConfigurationBuilder()
                                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                                 .Build();
 
             string connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            if (isDemoMode)
+            {
+
+            }
 
             var databaseService = new DatabaseService(connectionString);
             var bookManager = new BookManager(databaseService);
@@ -23,9 +38,7 @@ namespace bukShelf
             {
                 databaseService.CreateTables();
 
-
                 Console.WriteLine("Application is running...");
-                Console.WriteLine("Welcome to the Book and Shelf Management System!");
 
                 while (true)
                 {
@@ -53,13 +66,14 @@ namespace bukShelf
                             shelfManager.AddShelf();
                             break;
                         case "4":
+                            shelfManager.PrintAvailableShelfGenres();
                             shelfManager.AddBookToShelf();
                             break;
                         case "5":
                             bookManager.ListAllBooks();
                             break;
                         case "6":
-                            shelfManager.PrintShelvesWithBooks();  
+                            shelfManager.PrintShelvesWithBooks();
                             break;
                         case "7":
                             shelfManager.ListAllShelves();

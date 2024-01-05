@@ -313,9 +313,50 @@ namespace bukShelf.Database
 
             return shelfBooks;
         }
+        public int GetShelfIdByGenre(string shelfGenre)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "SELECT Id FROM Shelf WHERE Shelf_Type = @ShelfType";
+                    cmd.Parameters.AddWithValue("ShelfType", shelfGenre);
 
+                    object result = cmd.ExecuteScalar();
 
+                    if (result != null && int.TryParse(result.ToString(), out int shelfId))
+                    {
+                        return shelfId;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+            }
+        }
+        public List<string> GetAvailableShelfGenres()
+        {
+            List<string> availableGenres = new List<string>();
 
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var cmd = new NpgsqlCommand("SELECT DISTINCT Shelf_Type FROM Shelf", conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            availableGenres.Add(reader["Shelf_Type"].ToString());
+                        }
+                    }
+                }
+            }
+            return availableGenres;
+        }
     }
 }
 

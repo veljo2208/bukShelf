@@ -44,36 +44,53 @@ namespace bukShelf
 
         public void AddBookToShelf()
         {
-            Console.WriteLine("Enter shelf ID to add a book: ");
-            if (int.TryParse(Console.ReadLine(), out int shelfId))
+            Console.WriteLine("Enter shelf genre to add a book: ");
+            string shelfGenre = Console.ReadLine();
+
+            int shelfId = _databaseService.GetShelfIdByGenre(shelfGenre);
+
+            if (shelfId == -1)
             {
-                Console.WriteLine("Enter book details:");
-                Console.Write("Title: ");
-                string title = Console.ReadLine();
+                Console.WriteLine($"There's no shelf with the genre: {shelfGenre}");
+                return;
+            }
 
-                Console.Write("Author: ");
-                string author = Console.ReadLine();
+            Console.WriteLine("Enter book details:");
+            Console.Write("Title: ");
+            string title = Console.ReadLine();
 
-                Console.Write("Weight: ");
-                double weight;
-                double.TryParse(Console.ReadLine(), out weight);
+            Console.Write("Author: ");
+            string author = Console.ReadLine();
 
-                Console.Write("Size: ");
-                double size;
-                double.TryParse(Console.ReadLine(), out size);
+            Console.Write("Weight: ");
+            double weight;
+            double.TryParse(Console.ReadLine(), out weight);
 
-                Book newBook = new Book(title, author, weight, size);
+            Console.Write("Size: ");
+            double size;
+            double.TryParse(Console.ReadLine(), out size);
 
-                int generatedBookId = _databaseService.AddBookToDatabaseAndGetId(newBook, shelfId);
+            Book newBook = new Book(title, author, weight, size);
 
-                if (generatedBookId > 0)
-                {
-                    Console.WriteLine("Book added to the shelf successfully!");
-                }
-                else
-                {
-                    Console.WriteLine("Failed to add book to the shelf. Please check your input or shelf ID.");
-                }
+            int generatedBookId = _databaseService.AddBookToDatabaseAndGetId(newBook, shelfId);
+
+            if (generatedBookId > 0)
+            {
+                Console.WriteLine("Book added to the shelf successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Failed to add book to the shelf. Please check your input or shelf ID.");
+            }
+        }
+        public void PrintAvailableShelfGenres()
+        {
+            List<string> availableGenres = _databaseService.GetAvailableShelfGenres();
+
+            Console.WriteLine("Available shelf genres:");
+            foreach (var genre in availableGenres)
+            {
+                Console.WriteLine($"- {genre}");
             }
         }
         public void ListAllShelves()
@@ -94,23 +111,17 @@ namespace bukShelf
 
             foreach (var shelfType in shelfBooks.Keys)
             {
-                
-                    Console.WriteLine($"---> Shelf Genre: {shelfType} <---");
+                Console.WriteLine($"---> Shelf Genre: {shelfType} <---");
 
-                    foreach (var book in shelfBooks[shelfType])
-                    {
-                        Console.WriteLine($" - Book Title: {book.Title}");
-                        Console.WriteLine($"   Author: {book.Author}");
-                        Console.WriteLine($"   Weight: {book.Weight}g");
-                        Console.WriteLine($"   Size: {book.Size}cm²");
-                        Console.WriteLine();
-                    }
+                Console.WriteLine("Title\tAuthor\tWeight\tSize");
 
-                    Console.WriteLine("----------------------------");
+                foreach (var book in shelfBooks[shelfType])
+                {
+                    Console.WriteLine($"-{book.Title,5}\t{book.Author,2}\t{book.Weight}g\t{book.Size}cm²");
+                }
+
+                Console.WriteLine("----------------------------");
             }
         }
-
-
-
     }
 }
