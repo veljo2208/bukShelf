@@ -16,12 +16,12 @@ namespace MyProject.Models
         public int Id { get; set; }
         public string ShelfType { get; set; }
         public double Surface { get; set; }
-        public int BookCount { get; private set; }
+        public int BookCount { get; set; }
         public string Status { get; set; }
         public List<Book> Books { get; private set; }
         public double MaxWeightCapacity { get; private set; }
         public int MaxBooks { get; private set; }
-        public double CurrentWeightLoad { get; private set; }
+        public double CurrentWeightLoad { get; set; }
         public bool IsShelfSafe { get; private set; }
         public MaterialType Material { get; private set; }
 
