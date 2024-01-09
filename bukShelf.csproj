@@ -16,11 +16,6 @@
     <None Remove="SqlScripts\CreateTableBook.sql" />
     <None Remove="SqlScripts\CreateTableShelf.sql" />
     <None Remove="SqlScripts\CreateTableShelfBook.sql" />
-    <None Remove="SqlScripts\InsertTestShelves.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="SqlScripts\InsertTestShelves.sql" />
   </ItemGroup>
 
   <ItemGroup>
