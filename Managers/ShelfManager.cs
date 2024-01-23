@@ -137,6 +137,7 @@ namespace bukShelf
         {
             if (shelf.Material == MaterialType.Wood)
             {
+                // Hard-code treba izbaciti 
                 double maxWeightCapacity = shelf.Surface * 10.14;
                 if (shelf.CurrentWeightLoad <= maxWeightCapacity)
                 {
@@ -162,16 +163,17 @@ namespace bukShelf
             {
                 if (shelfBooks[shelfType].Count > 0)
                 {
-                    Console.WriteLine($"---> Shelf Genre: {shelfType} <---");
+                    Console.WriteLine($"-> Shelf Genre: {shelfType} <-");
 
-                    Console.WriteLine("Title\tAuthor\tWeight\tSize");
+                    Console.WriteLine("Id\tTitle\t\tAuthor\t\tWeight(g)\tSize(cm²)");
+                    Console.WriteLine("---------------------------------------------------------------------------------------------");
 
+                    int id = 1;
                     foreach (var book in shelfBooks[shelfType])
                     {
-                        Console.WriteLine($"{book.Title}\t{book.Author}\t{book.Weight}g\t{book.Size}cm²");
+                        Console.WriteLine($"{id}\t{book.Title,-15}\t{book.Author,-15}\t{book.Weight,-15}g\t{book.Size,-15}cm²");
+                        id++;
                     }
-
-                    Console.WriteLine("----------------------------");
                 }
             }
         }

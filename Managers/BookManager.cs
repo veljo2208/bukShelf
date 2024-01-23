@@ -86,10 +86,12 @@ namespace bukShelf.Managers
             List<Book> books = _databaseService.GetAllBooks();
 
             Console.WriteLine("Available Books:");
-            Console.WriteLine("Id\tTitle\tAuthor\tWeight\tSize");
+            Console.WriteLine("Id\tTitle\t\tAuthor\t\tWeight\tSize");
+            Console.WriteLine("----------------------------------------------------");
+
             foreach (var book in books)
             {
-                Console.WriteLine($"{book.Id}\t{book.Title}\t{book.Author}\t{book.Weight}\t{book.Size}");
+                Console.WriteLine($"{book.Id}\t{book.Title,-15}\t{book.Author,-15}\t{book.Weight}\t{book.Size,-8}");
             }
         }
     }

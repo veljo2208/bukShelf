@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using MyProject.Models;
 using Npgsql;
 
@@ -62,9 +63,7 @@ namespace bukShelf.Database
             ('Psychology', 570.9293824, 'Metal', 0, 0, 'Safe'),
             ('Romance', 635.2762531, 'Wood', 0, 0, 'Safe'),
             ('Economy', 476.9784323, 'Metal', 0, 0, 'Safe'),
-            ('Comic', 174.2419124, 'Wood', 0, 0, 'Safe');
-    ";
-
+            ('Comic', 174.2419124, 'Wood', 0, 0, 'Safe'); ";
             try
             {
                 using (var conn = new NpgsqlConnection(connectionString))
@@ -84,6 +83,22 @@ namespace bukShelf.Database
                 Console.WriteLine($"Error inserting data into Shelf table: {ex.Message}");
             }
         }
+        public void InsertTestDataIntoBookTable()
+        {
+            string sqlScript1 = @"
+         INSERT INTO Book (Title, Author, Weight, Size)   
+         VALUES
+            ('LOTR','Tolkien','3000','123'),
+            ('Philosopher's Stone','J. K. Rowling','3000','123'),
+            ('Chamber of Secrets','J. K. Rowling','3000','123'),
+            ('Prisoner of Azkaban','J. K. Rowling','3000','123'),
+            ('Goblet of Fire','J. K. Rowling','3000','123'),
+            ('Order of the Phoenix','J. K. Rowling','3000','123'),
+            ('Half-Blood Prince','J. K. Rowling','3000','123'),
+            ('Deathly Hallows','J. K. Rowling','3000','123') ";
+
+        }
+
         public void InsertDataFromCSVIntoBookTable(string filePath)
         {
             try
