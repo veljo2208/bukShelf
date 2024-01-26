@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bukShelf.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -47,7 +48,7 @@ namespace MyProject.Models
             BookCount = 0;
             Status = "Safe";
         }
-
+ 
         private void UpdateShelfStatus()
         {
             double loadPercentage = (CurrentWeightLoad / MaxWeightCapacity) * 100;
@@ -63,5 +64,30 @@ namespace MyProject.Models
                 Console.WriteLine($"Shelf {Id} is safe. Load percentage: {loadPercentage}%");
             }
         }
+        public bool AddBook(Book book)
+        {
+                Books.Add(book);
+                BookCount++;
+                CurrentWeightLoad += book.Weight;
+                UpdateShelfStatus();
+                return true;
+            
+        }
+        public bool RemoveBook(Book book)
+        {
+            if (Books.Remove(book))
+            {
+                BookCount--;
+                CurrentWeightLoad -= book.Weight;
+                UpdateShelfStatus();
+                return true;
+            }
+            else
+            {
+                Console.WriteLine($"Book '{book.Title}' is not on Shelf {Id}.");
+                return false;
+            }
+        }
     }
 }
+
