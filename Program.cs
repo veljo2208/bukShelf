@@ -34,6 +34,7 @@ namespace bukShelf
             if (isDemoMode)
             {
                 databaseService.InsertTestDataIntoShelfTable();
+                databaseService.InsertTestDataIntoBookTable();
             }
 
             try

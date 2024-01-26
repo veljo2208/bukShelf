@@ -163,15 +163,15 @@ namespace bukShelf
             {
                 if (shelfBooks[shelfType].Count > 0)
                 {
-                    Console.WriteLine($"-> Shelf Genre: {shelfType} <-");
+                    Console.WriteLine($"\n-> Shelf Genre: {shelfType} <-");
 
-                    Console.WriteLine("Id\tTitle\t\tAuthor\t\tWeight(g)\tSize(cm²)");
-                    Console.WriteLine("---------------------------------------------------------------------------------------------");
+                    Console.WriteLine("Id\tTitle\t\t\t\tAuthor\t\t\t\tWeight(g)\tSize(cm²)");
+                    Console.WriteLine("---------------------------------------------------------------------------------------------------");
 
                     int id = 1;
                     foreach (var book in shelfBooks[shelfType])
                     {
-                        Console.WriteLine($"{id}\t{book.Title,-15}\t{book.Author,-15}\t{book.Weight,-15}g\t{book.Size,-15}cm²");
+                        Console.WriteLine($"{id}\t{book.Title,-30}\t{book.Author,-30}\t{book.Weight,-10}\t{book.Size,-10}");
                         id++;
                     }
                 }

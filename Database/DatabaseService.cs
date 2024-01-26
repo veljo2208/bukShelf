@@ -89,7 +89,7 @@ namespace bukShelf.Database
          INSERT INTO Book (Title, Author, Weight, Size)   
          VALUES
             ('LOTR','Tolkien','3000','123'),
-            ('Philosopher's Stone','J. K. Rowling','3000','123'),
+            ('Philosopher''s Stone','J. K. Rowling','3000','123'), -- Escape the single quote
             ('Chamber of Secrets','J. K. Rowling','3000','123'),
             ('Prisoner of Azkaban','J. K. Rowling','3000','123'),
             ('Goblet of Fire','J. K. Rowling','3000','123'),
@@ -97,6 +97,40 @@ namespace bukShelf.Database
             ('Half-Blood Prince','J. K. Rowling','3000','123'),
             ('Deathly Hallows','J. K. Rowling','3000','123') ";
 
+            string sqlScript2 = @"
+         INSERT INTO shelfbook (ShelfId, BookId)
+         VALUES 
+            (1,1),
+            (1,2),
+            (1,3),
+            (1,4),
+            (1,5),
+            (1,6),
+            (1,7),
+            (1,8) ";
+            try
+            {
+                using (var conn = new NpgsqlConnection(connectionString))
+                {
+                    conn.Open();
+                    Console.WriteLine("Connected to PostgreSQL!");
+
+                    using (var cmd = new NpgsqlCommand(sqlScript1, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                        Console.WriteLine("Data inserted into books table.");
+                    }
+                    using (var cmd = new NpgsqlCommand(sqlScript2, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                        Console.WriteLine("Shelfs and books connected.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inserting data into Shelf table: {ex.Message}");
+            }
         }
 
         public void InsertDataFromCSVIntoBookTable(string filePath)
